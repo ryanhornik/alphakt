@@ -22,6 +22,7 @@ def log_post(submission):
     created_time = datetime.fromtimestamp(submission.created_utc)
     sub_dict = {
         "quarantine": submission.quarantine,
+        "_timeStamp": submission.created_utc,
         "domain": "self" if submission.is_self else submission.domain,
         "hidden": submission.hidden,
         "removal_reason": submission.removal_reason,

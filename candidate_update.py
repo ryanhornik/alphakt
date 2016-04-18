@@ -16,39 +16,7 @@ redirect_uri = "http://127.0.0.1:65010/authorize_callback"
 dataset = []
 submissionIds=[]
 
-def log_post(submission):
-    created_time = datetime.fromtimestamp(submission.created_utc)
-    sub_dict = {
-        "quarantine": submission.quarantine,
-        "_timeStamp": submission.created_utc,
-        "domain": "self" if submission.is_self else submission.domain,
-        "hidden": submission.hidden,
-        "removal_reason": submission.removal_reason,
-        "selftext": submission.selftext,
-        "id": submission.id,
-        "author": submission.author,
-        "num_reports": submission.num_reports or 0,
-        "stickied": submission.stickied,
-        "gilded": submission.gilded,
-        "created_seconds_since_midnight":
-            (created_time - created_time.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds(),
-        "created_day_of_week": created_time.weekday(),
-        "is_self": submission.is_self,
-        "author_flair_text": submission.author_flair_text,
-        "ups": submission.ups,
-        "score": submission.score,
-        "subreddit": submission.subreddit,
-        "over_18": submission.over_18,
-        "title": submission.title,
-        "downs": submission.downs,
-        "locked": submission.locked,
-        "distinguished": submission.distinguished,
-        "num_comments": submission.num_comments,
-        "edited": True if submission.edited is not False else False,  # submission.edited is either False or int.
-        "link_flair_text": submission.link_flair_text,
-    }
-    dataset.append(sub_dict)
-
+from candidate_identification import log_post
 
 
 def save_dataset(path):

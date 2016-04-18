@@ -1,6 +1,8 @@
 decorator==4.0.9
-praw==3.4.0
-git+https://github.com/pybrain/pybrain.git@9c56862e509c94961a1d428e68642baf2636b76f
+numpy==1.11.0
 requests==2.9.1
+scipy==0.17.0
 six==1.10.0
 update-checker==0.11
+praw==3.4.0
+git+https://github.com/pybrain/pybrain.git@9c56862e509c94961a1d428e68642baf2636b76f

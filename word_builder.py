@@ -3,7 +3,7 @@ import csv
 import os
 import re
 
-HOME = os.path.expanduser('~')
+from contants import HOME
 
 
 def save_dataset(path, word_counts):

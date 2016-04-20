@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 import csv
+import os
 import time
 from datetime import datetime
 
 import praw
-import os
 
-HOME = os.path.expanduser('~')
+from contants import HOME, client_id, reddit_secret, redirect_uri, POSTS_PER_MINUTE
 
 POSTS_LOGGED = 0
-reddit_secret = os.environ['REDDIT_SECRET']
-client_id = os.environ['REDDIT_CLIENT_ID']
-redirect_uri = "http://127.0.0.1:65010/authorize_callback"
-POSTS_PER_MINUTE = 500  # This is way beyond my estimate but it worked for my test of 10 to 15 min
-
 dataset = []
 
 

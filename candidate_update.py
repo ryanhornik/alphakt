@@ -1,15 +1,12 @@
 #!/usr/bin/env python
-
 import csv
 import praw
 import os
 
 from candidate_identification import log_post
 
-HOME = os.path.expanduser('~')
-reddit_secret = os.environ['REDDIT_SECRET']
-client_id = os.environ['REDDIT_CLIENT_ID']
-redirect_uri = "http://127.0.0.1:65010/authorize_callback"
+from contants import HOME, reddit_secret, client_id, redirect_uri
+
 
 dataset = []
 submissionIds = []

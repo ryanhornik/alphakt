@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import csv
-import time
-from datetime import datetime
+
 
 import praw
 import os

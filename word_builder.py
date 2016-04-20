@@ -1,45 +1,52 @@
-
 import csv
 import os
 import re
-import sys
 
-ascii = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890'
-redditWordsDict = {}
 HOME = os.path.expanduser('~')
 
-def save_dataset(path):
+
+def save_dataset(path, word_counts):
     if not os.path.isdir('{}/.alphakt'.format(HOME)):
         os.mkdir('{}/.alphakt'.format(HOME))
+
     with open(path[:-4] + "WordsCount" + path[-4:], 'w') as data_file:
-        #fieldnames = ['Word', 'Count']
         writer = csv.writer(data_file)
 
-        for row in redditWordsDict.items():
+        for row in word_counts.items():
             writer.writerow(row)
         data_file.close()
 
-def get_words(path):
+
+def get_words(path, word_counts):
     with open(path) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            putWords(cleanWords(row['title'].split()), 3)
-            putWords(cleanWords(row['selftext'].split()), 1)
+            put_words(clean_words(row['title'].split()), 3, word_counts)
+            put_words(clean_words(row['selftext'].split()), 1, word_counts)
 
-def putWords(words, weight):
+
+def put_words(words, weight, word_counts):
     for word in words:
-        redditWordsDict[word] = redditWordsDict.get(word, 0) + weight
+        word_counts[word] = word_counts.get(word, 0) + weight
 
-def cleanWords(words):
-    returnWords = []
+
+def clean_words(words):
+    cleaned_words = []
+    alphanumeric = re.compile(r'[^0-9a-z]+')
     for word in words:
-        returnWords.append(re.sub('[^0-9a-zA-Z]+', '', word.lower()))
-    return returnWords
+        cleaned_words.append(alphanumeric.sub('', word))
+    return cleaned_words
 
-def main():
-    path = sys.argv[1] if len(sys.argv) >= 2 else exit("Pass in file path")
-    get_words(path)
-    save_dataset(path)
+
+def main(path):
+    word_counts = {}
+    get_words(path, word_counts)
+    save_dataset(path, word_counts)
+
 
 if __name__ == "__main__":
-    main()
+    from sys import argv
+    if len(argv) >= 2:
+        main(argv[1])
+    else:
+        exit("Pass in file path")

@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
 import csv
-
-
 import praw
 import os
-import sys
+
+from candidate_identification import log_post
 
 HOME = os.path.expanduser('~')
 reddit_secret = os.environ['REDDIT_SECRET']
@@ -13,9 +12,7 @@ client_id = os.environ['REDDIT_CLIENT_ID']
 redirect_uri = "http://127.0.0.1:65010/authorize_callback"
 
 dataset = []
-submissionIds=[]
-
-from candidate_identification import log_post
+submissionIds = []
 
 
 def save_dataset(path):
@@ -28,7 +25,8 @@ def save_dataset(path):
         writer.writerows(dataset)
         data_file.close()
 
-def get_submissionIDs(path):
+
+def get_submission_ids(path):
     with open(path) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -37,7 +35,7 @@ def get_submissionIDs(path):
 
 
 def update_submissions(reddit, path):
-    get_submissionIDs(path)
+    get_submission_ids(path)
 
     updated_submissions = reddit.get_submissions(submissionIds)
     for sub in updated_submissions:
@@ -46,12 +44,12 @@ def update_submissions(reddit, path):
     save_dataset(path)
 
 
-def main():
-    path = sys.argv[1] if len(sys.argv) >= 2 else exit("Pass in file path")
+def main(path):
     reddit = praw.Reddit(user_agent="alpha_kt")
     reddit.set_oauth_app_info(client_id=client_id, client_secret=reddit_secret, redirect_uri=redirect_uri)
     update_submissions(reddit, path)
 
 
 if __name__ == "__main__":
-    main()
+    from sys import argv
+    main(argv[1] if len(argv) >= 2 else exit("Pass in file path"))

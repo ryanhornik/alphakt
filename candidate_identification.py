@@ -5,7 +5,6 @@ from datetime import datetime
 
 import praw
 import os
-import sys
 
 HOME = os.path.expanduser('~')
 
@@ -76,13 +75,13 @@ def log_in_range(reddit, start, end):
     save_dataset()
 
 
-def main():
-    start = int(sys.argv[1]) if len(sys.argv) >= 3 else 0
-    end = int(sys.argv[2]) if len(sys.argv) >= 3 else 5
+def main(start, end):
     reddit = praw.Reddit(user_agent="alpha_kt")
     reddit.set_oauth_app_info(client_id=client_id, client_secret=reddit_secret, redirect_uri=redirect_uri)
     log_in_range(reddit, start=start, end=end)
 
 
 if __name__ == "__main__":
-    main()
+    from sys import argv
+    main(start=int(argv[1]) if len(argv) >= 3 else 0,
+         end=int(argv[2]) if len(argv) >= 3 else 5)

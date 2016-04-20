@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import csv
 import os
 import re
@@ -31,11 +32,8 @@ def put_words(words, weight, word_counts):
 
 
 def clean_words(words):
-    cleaned_words = []
     alphanumeric = re.compile(r'[^0-9a-z]+')
-    for word in words:
-        cleaned_words.append(alphanumeric.sub('', word))
-    return cleaned_words
+    return map(lambda word: alphanumeric.sub('', word), words)
 
 
 def main(path):

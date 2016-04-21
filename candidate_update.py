@@ -6,7 +6,7 @@ import os
 
 from candidate_identification import log_post
 
-from contants import HOME, reddit_secret, client_id, redirect_uri, child_directories, next_dir
+from constants import HOME, reddit_secret, client_id, redirect_uri, child_directories, next_dir
 
 
 updated_files = []

@@ -6,7 +6,7 @@ from datetime import datetime
 
 import praw
 
-from contants import HOME, client_id, reddit_secret, redirect_uri, POSTS_PER_MINUTE, child_directories
+from constants import HOME, client_id, reddit_secret, redirect_uri, POSTS_PER_MINUTE, child_directories
 
 POSTS_LOGGED = 0
 

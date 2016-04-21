@@ -4,7 +4,7 @@ import os
 import praw
 from candidate_identification import log_in_range
 from candidate_update import update_submissions
-from contants import child_directories, access_credentials, client_id, reddit_secret, redirect_uri, HOME
+from constants import child_directories, access_credentials, client_id, reddit_secret, redirect_uri, HOME
 
 
 def main():

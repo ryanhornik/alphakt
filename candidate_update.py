@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import codecs
 import csv
 import praw
 import os
@@ -26,7 +27,7 @@ def save_dataset(directory, file_, dataset):
 def dataset_from_file(path):
     dataset = {}
     with open(path) as csvfile:
-        reader = csv.DictReader(csvfile)
+        reader = csv.DictReader(x.replace('\0', '') for x in csvfile)
         for row in reader:
             dataset[row['id']] = row
     return dataset

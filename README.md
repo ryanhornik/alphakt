@@ -7,6 +7,9 @@ Add the lines
 
     export REDDIT_SECRET=XXX
     export REDDIT_CLIENT_ID=XXX
+    export ACCESS_TOKEN=XXX
+    export REFRESH_TOKEN=XXX
+
 
 to the end of venv/bin/activate
 

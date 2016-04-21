@@ -50,7 +50,8 @@ def save_dataset(dataset):
         os.mkdir('{}/.alphakt'.format(HOME))
         for directory in child_directories:
             os.mkdir('{}/.alphakt/{}'.format(HOME, directory))
-    with open('{}/.alphakt/fresh/{}.csv'.format(HOME, time.time()), 'w') as data_file:
+    filename = "{}.csv".format(time.time())
+    with open('{}/.alphakt/fresh/{}'.format(HOME, filename), 'w') as data_file:
         fieldnames = list(dataset[0].keys())
         writer = csv.DictWriter(data_file, fieldnames=fieldnames)
         writer.writeheader()

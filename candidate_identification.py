@@ -6,10 +6,9 @@ from datetime import datetime
 
 import praw
 
-from contants import HOME, client_id, reddit_secret, redirect_uri, POSTS_PER_MINUTE
+from contants import HOME, client_id, reddit_secret, redirect_uri, POSTS_PER_MINUTE, child_directories
 
 POSTS_LOGGED = 0
-dataset = []
 
 
 def log_post(submission):
@@ -43,13 +42,15 @@ def log_post(submission):
         "edited": True if submission.edited is not False else False,  # submission.edited is either False or int.
         "link_flair_text": submission.link_flair_text,
     }
-    dataset.append(sub_dict)
+    return sub_dict
 
 
-def save_dataset():
+def save_dataset(dataset):
     if not os.path.isdir('{}/.alphakt'.format(HOME)):
         os.mkdir('{}/.alphakt'.format(HOME))
-    with open('{}/.alphakt/{}.csv'.format(HOME, time.time()), 'w') as data_file:
+        for directory in child_directories:
+            os.mkdir('{}/.alphakt/{}'.format(HOME, directory))
+    with open('{}/.alphakt/fresh/{}.csv'.format(HOME, time.time()), 'w') as data_file:
         fieldnames = list(dataset[0].keys())
         writer = csv.DictWriter(data_file, fieldnames=fieldnames)
         writer.writeheader()
@@ -59,15 +60,16 @@ def save_dataset():
 
 def log_in_range(reddit, start, end):
     all_submissions = reddit.get_subreddit('all').get_new(limit=POSTS_PER_MINUTE * end)
+    dataset = []
 
     current_time = time.time()
     for submission in all_submissions:
         sub_age_minutes = (current_time - submission.created_utc) / 60
         if end > sub_age_minutes > start:
-            log_post(submission)
+            dataset.append(log_post(submission))
         elif sub_age_minutes > end:
             break
-    save_dataset()
+    save_dataset(dataset)
 
 
 def main(start, end):
@@ -79,4 +81,4 @@ def main(start, end):
 if __name__ == "__main__":
     from sys import argv
     main(start=int(argv[1]) if len(argv) >= 3 else 0,
-         end=int(argv[2]) if len(argv) >= 3 else 5)
+         end=int(argv[2]) if len(argv) >= 3 else 60)

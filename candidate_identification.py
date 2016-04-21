@@ -46,10 +46,6 @@ def log_post(submission):
 
 
 def save_dataset(dataset):
-    if not os.path.isdir('{}/.alphakt'.format(HOME)):
-        os.mkdir('{}/.alphakt'.format(HOME))
-        for directory in child_directories:
-            os.mkdir('{}/.alphakt/{}'.format(HOME, directory))
     filename = "{}.csv".format(time.time())
     with open('{}/.alphakt/fresh/{}'.format(HOME, filename), 'w') as data_file:
         fieldnames = list(dataset[0].keys())

@@ -12,10 +12,10 @@ def main():
     reddit.set_oauth_app_info(client_id=client_id, client_secret=reddit_secret, redirect_uri=redirect_uri)
     reddit.set_access_credentials(**access_credentials)
 
-    if not os.path.isdir('{}/.alphakt'.format(HOME)):
-        os.mkdir('{}/.alphakt'.format(HOME))
+    if not os.path.isdir(HOME):
+        os.mkdir(HOME)
         for directory in child_directories:
-            os.mkdir('{}/.alphakt/{}'.format(HOME, directory))
+            os.mkdir('{}/{}'.format(HOME, directory))
 
     for directory in child_directories:
         update_submissions(reddit, directory)

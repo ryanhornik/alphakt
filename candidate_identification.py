@@ -47,7 +47,7 @@ def log_post(submission):
 
 def save_dataset(dataset):
     filename = "{}.csv".format(time.time())
-    with open('{}/.alphakt/fresh/{}'.format(HOME, filename), 'w') as data_file:
+    with open('{}/fresh/{}'.format(HOME, filename), 'w') as data_file:
         fieldnames = list(dataset[0].keys())
         writer = csv.DictWriter(data_file, fieldnames=fieldnames)
         writer.writeheader()

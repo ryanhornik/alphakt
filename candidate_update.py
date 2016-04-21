@@ -13,7 +13,7 @@ updated_files = []
 
 
 def save_dataset(directory, file_, dataset):
-    with open("{}/.alphakt/{}/{}".format(HOME, next_dir(directory), file_), 'w') as data_file:
+    with open("{}/{}/{}".format(HOME, next_dir(directory), file_), 'w') as data_file:
         fieldnames = list(next(iter(dataset.values())).keys())
         writer = csv.DictWriter(data_file, fieldnames=fieldnames)
         writer.writeheader()
@@ -21,7 +21,7 @@ def save_dataset(directory, file_, dataset):
             writer.writerow(value)
         data_file.close()
 
-    os.remove("{}/.alphakt/{}/{}".format(HOME, directory, file_))
+    os.remove("{}/{}/{}".format(HOME, directory, file_))
 
 
 def dataset_from_file(path):
@@ -37,10 +37,10 @@ def update_submissions(reddit, directory):
     if directory == child_directories[-1]:
         return
 
-    for file_ in os.listdir("{}/.alphakt/{}".format(HOME, directory)):
+    for file_ in os.listdir("{}/{}".format(HOME, directory)):
         if file_ in updated_files:
             continue
-        path = "{}/.alphakt/{}/{}".format(HOME, directory, file_)
+        path = "{}/{}/{}".format(HOME, directory, file_)
 
         dataset = dataset_from_file(path)
         ids = ["t3_" + key for key in dataset.keys()]

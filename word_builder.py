@@ -7,8 +7,8 @@ from contants import HOME
 
 
 def save_dataset(path, word_counts):
-    if not os.path.isdir('{}/.alphakt'.format(HOME)):
-        os.mkdir('{}/.alphakt'.format(HOME))
+    if not os.path.isdir(HOME):
+        os.mkdir(HOME)
 
     with open(path[:-4] + "WordsCount" + path[-4:], 'w') as data_file:
         writer = csv.writer(data_file)

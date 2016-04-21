@@ -1,7 +1,7 @@
 from os import environ
 from os.path import expanduser
 
-HOME = expanduser('~')
+HOME = expanduser('~/.alphakt')
 reddit_secret = environ['REDDIT_SECRET']
 client_id = environ['REDDIT_CLIENT_ID']
 redirect_uri = "http://127.0.0.1:65010/authorize_callback"

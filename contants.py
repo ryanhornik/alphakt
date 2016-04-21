@@ -15,5 +15,12 @@ child_directories = [
     'updated_4hr',
     'updated_5hr',
     'updated_6hr',
-    'updated_7hr'
+    'updated_7hr',
+    'updated_8hr',
 ]
+
+
+def next_dir(current):
+    if current == child_directories[-1]:
+        return None
+    return child_directories[child_directories.index(current) + 1]

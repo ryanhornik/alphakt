@@ -5,43 +5,52 @@ import os
 
 from candidate_identification import log_post
 
-from contants import HOME, reddit_secret, client_id, redirect_uri, child_directories
+from contants import HOME, reddit_secret, client_id, redirect_uri, child_directories, next_dir
 
-submissionIds = []
+
+updated_files = []
 
 
 def save_dataset(directory, file_, dataset):
-    with open("{}/.alphakt/{}/{}".format(HOME, directory, file_), 'w') as data_file:
-        fieldnames = list(dataset[0].keys())
+    with open("{}/.alphakt/{}/{}".format(HOME, next_dir(directory), file_), 'w') as data_file:
+        fieldnames = list(next(iter(dataset.values())).keys())
         writer = csv.DictWriter(data_file, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(dataset)
+        for key, value in dataset.items():
+            writer.writerow(value)
         data_file.close()
 
+    os.remove("{}/.alphakt/{}/{}".format(HOME, directory, file_))
 
-def get_submission_ids(path):
+
+def dataset_from_file(path):
+    dataset = {}
     with open(path) as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            submissionIds.append('t3_' + row['id'])
-            print('Adding submission ID ' + row['id'])
+            dataset[row['id']] = row
+    return dataset
 
 
 def update_submissions(reddit, directory):
     if directory == child_directories[-1]:
         return
 
-    dataset = []
-
     for file_ in os.listdir("{}/.alphakt/{}".format(HOME, directory)):
+        if file_ in updated_files:
+            continue
         path = "{}/.alphakt/{}/{}".format(HOME, directory, file_)
-        get_submission_ids(path)
 
-        updated_submissions = reddit.get_submissions(submissionIds)
+        dataset = dataset_from_file(path)
+        ids = ["t3_" + key for key in dataset.keys()]
+
+        updated_submissions = reddit.get_submissions(ids)
         for sub in updated_submissions:
             if sub is not None:
-                dataset.append(log_post(sub))
+                dataset[sub.id][next_dir(directory)] = sub.score
         save_dataset(directory, file_, dataset)
+
+        updated_files.append(file_)
 
 
 def main():

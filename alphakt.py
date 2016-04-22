@@ -19,7 +19,7 @@ def main():
 
     for directory in child_directories:
         update_submissions(reddit, directory)
-    log_in_range(reddit, start=0, end=1)  # Happens second so it won't get updated
+    log_in_range(reddit, start=0, end=60)  # Happens second so it won't get updated
 
 if __name__ == "__main__":
     main()

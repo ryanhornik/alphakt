@@ -48,7 +48,15 @@ def update_submissions(reddit, directory):
         updated_submissions = reddit.get_submissions(ids)
         for sub in updated_submissions:
             if sub is not None:
-                dataset[sub.id][next_dir(directory)] = sub.score
+                next_directory = next_dir(directory)
+                dataset[sub.id][next_directory + "_score"] = sub.score
+                dataset[sub.id][next_directory + "_ups"] = sub.ups
+                dataset[sub.id][next_directory + "_downs"] = sub.downs
+                dataset[sub.id][next_directory + "_num_comments"] = sub.num_comments
+                dataset[sub.id][next_directory + "_gilded"] = sub.gilded
+                dataset[sub.id][next_directory + "_num_reports"] = sub.num_reports
+                dataset[sub.id][next_directory + "_locked"] = sub.locked
+                dataset[sub.id][next_directory + "_edited"] = sub.edited
         save_dataset(directory, file_, dataset)
 
         updated_files.append(file_)

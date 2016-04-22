@@ -16,14 +16,8 @@ access_credentials = {
 
 child_directories = [
     'fresh',
-    'updated_1hr',
-    'updated_2hr',
-    'updated_3hr',
-    'updated_4hr',
-    'updated_5hr',
-    'updated_6hr',
-    'updated_7hr',
-    'updated_8hr',
+    '1hr', '2hr', '3hr', '4hr',
+    '5hr', '6hr', '7hr', '8hr',
 ]
 
 

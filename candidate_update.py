@@ -56,7 +56,7 @@ def update_submissions(reddit, directory):
                 dataset[sub.id][next_directory + "_gilded"] = sub.gilded
                 dataset[sub.id][next_directory + "_num_reports"] = sub.num_reports or 0
                 dataset[sub.id][next_directory + "_locked"] = sub.locked
-                dataset[sub.id][next_directory + "_edited"] = True if sub.edited is not False else False,
+                dataset[sub.id][next_directory + "_edited"] = True if sub.edited is not False else False
         save_dataset(directory, file_, dataset)
 
         updated_files.append(file_)

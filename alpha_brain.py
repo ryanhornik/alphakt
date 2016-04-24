@@ -4,24 +4,22 @@ import os
 
 from pybrain.datasets import SupervisedDataSet
 from pybrain.structure import FeedForwardNetwork, FullConnection, LinearLayer, SigmoidLayer
-
-
-def main():
-    nn = build_nn()
-    ds = build_data()
-
-
-if __name__ == "__main__":
-    main()
+from constants import input_columns
+from pybrain.supervised import BackpropTrainer
 
 
 def build_nn():
+    print("Building nn")
     nn = FeedForwardNetwork()
 
     # 24 columns per dataset  with bins 34
-    in_layer = LinearLayer(24)
+    in_layer = LinearLayer(len(input_columns))
     hidden_layer = SigmoidLayer(12)
     out_layer = LinearLayer(1)
+
+    nn.addInputModule(in_layer)
+    nn.addModule(hidden_layer)
+    nn.addOutputModule(out_layer)
 
     in_to_hidden = FullConnection(in_layer, hidden_layer)
     hidden_to_out = FullConnection(hidden_layer, out_layer)
@@ -35,14 +33,32 @@ def build_nn():
 
 
 def build_data(directory):
-    ds = SupervisedDataSet(24, 1)
+    print("Building data")
+    ds = SupervisedDataSet(len(input_columns), 1)
     for f in os.listdir(directory):
         fin = open(directory + f, 'r')
         csv_in = csv.DictReader(fin)
 
         for row in csv_in:
-            ds.addSample(
-                (row[''])
-            )
+            inputs = tuple(map(lambda x: row[x], input_columns))
+            if '' in inputs or row['8hr_score'] == '':
+                print("Blank row fuck")
+                continue
+            ds.addSample(inputs, (row['8hr_score'],))
+        print("Finished File")
 
     return ds
+
+
+def main():
+    nn = build_nn()
+    ds = build_data('completed_data/fixed/')
+
+    trainer = BackpropTrainer(nn, ds)
+    print("Training nn")
+    trainer.trainUntilConvergence(verbose=True)
+
+
+if __name__ == "__main__":
+    main()
+

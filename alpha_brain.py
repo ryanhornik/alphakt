@@ -39,13 +39,14 @@ def build_data(directory):
         fin = open(directory + f, 'r')
         csv_in = csv.DictReader(fin)
 
+        blanks = 0
         for row in csv_in:
             inputs = tuple(map(lambda x: row[x], input_columns))
             if '' in inputs or row['8hr_score'] == '':
-                print("Blank row fuck")
+                blanks += 1
                 continue
             ds.addSample(inputs, (row['8hr_score'],))
-        print("Finished File")
+        print("Finished File, {} blanks".format(blanks))
 
     return ds
 

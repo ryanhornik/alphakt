@@ -4,3 +4,4 @@ venv/
 /CSVBuilder.py
 *.pyc
 __pycache__/
+/scons-2.5.0

@@ -1,6 +1,7 @@
 import csv
 
 import os
+from numpy import random
 
 from pybrain.datasets import SupervisedDataSet
 from pybrain.tools.shortcuts import buildNetwork
@@ -75,6 +76,19 @@ def main():
     trainer = BackpropTrainer(nn, ds)
     print("Training nn")
     trainer.trainUntilConvergence(verbose=True)
+
+
+def n_datasets(ds, n=2):
+    """Produce n new datasets, each containing 1/n of the original dataset"""
+    indicies = random.permutation(len(ds))
+    separator = int(len(ds) // n)
+
+    indicies_lists = [indicies[x*separator: (x+1)*separator] for x in range(0, n)]
+
+    data_sets = (SupervisedDataSet(inp=ds['input'][indicies_lists[y]].copy(),
+                                   target=ds['target'][indicies_lists[y]]) for y in range(0, n))
+
+    return data_sets
 
 
 if __name__ == "__main__":

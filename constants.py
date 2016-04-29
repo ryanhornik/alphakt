@@ -26,32 +26,31 @@ input_columns = (
     "domain",  # str -> int
     "hidden",  # true/false -> 0/1
 
-    "author",  # str
-    "num_reports",  # int -> int
+    # "author",  # str
+    "num_reports",  # int -> int (normalize)
     "stickied",  # bool -> 0/1
     "gilded",  # bool -> 0/1
-    "created_seconds_since_midnight",  # int -> int
+    "created_seconds_since_midnight",  # int -> int (change to hours)
     "created_day_of_week",  # int -> int
-    "author_flair_text",  # str
 
-    "ups",  # int -> int
-    "downs",  # int -> int
-    "score",  # int -> int
-    "subreddit",  # str
+    "ups",  # int -> int (normalize)
+    "downs",  # int -> int (normalize)
+    "score",  # int -> int (normalize)
+    "subreddit",  # str -> int
     "over_18",  # bool -> 0/1
     "locked",  # bool -> 0/1
     "distinguished",  # ''/'moderator'/'admin'/'special' -> 0/1/2/3
-    "num_comments",  # int -> int
+    "num_comments",  # int -> int (normalize)
     "edited",  # bool -> 0/1
+    "author_flair_text",
+    "link_flair_text",
 
-    "link_flair_text",  # str
-
-    "1hr_score",  # int -> int
-    "1hr_ups",  # int -> int
-    "1hr_downs",  # int -> int
-    "1hr_num_comments",  # int -> int
+    "1hr_score",  # int -> int (normalize)
+    "1hr_ups",  # int -> int (normalize)
+    "1hr_downs",  # int -> int (normalize)
+    "1hr_num_comments",  # int -> int (normalize)
     "1hr_gilded",  # bool -> 0/1
-    "1hr_num_reports",  # int -> int
+    "1hr_num_reports",  # int -> int (normalize)
     "1hr_locked",  # bool -> 0/1
     "1hr_edited",  # bool -> 0/1
 
@@ -63,6 +62,34 @@ input_columns = (
     "2hr_num_reports",
     "2hr_locked",
     "2hr_edited",
+)
+
+nominal_columns = (
+    "domain",
+    "subreddit",
+)
+
+normalized_columns = (
+    "num_reports",
+    "ups",
+    "downs",
+    "score",
+    "num_comments",
+
+    "1hr_score",
+    "1hr_ups",
+    "1hr_ups",
+    "1hr_downs",
+    "1hr_num_comments",
+    "1hr_num_reports",
+
+    "2hr_score",
+    "2hr_ups",
+    "2hr_ups",
+    "2hr_downs",
+    "2hr_num_comments",
+    "2hr_num_reports",
+
 )
 
 

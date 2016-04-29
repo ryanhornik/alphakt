@@ -7,12 +7,6 @@ p2 = "completed_data/fixed/"
 distinguished = {'': 0, 'moderator': 1, 'admin': 2, 'special': 3}
 
 
-def fix(s):
-    if s == '':
-        return 0
-    return int(s.replace('.', 'z').replace('_', 'y').replace('-', 'q').lower(), 36)
-
-
 def correct_accidental_tuples():
     fuckups = []
 
@@ -33,8 +27,6 @@ def correct_accidental_tuples():
             for key, val in line.items():
                 if key == "distinguished":
                     temp[key] = distinguished[val]
-                elif key in ("domain", "author", "subreddit"):
-                    temp[key] = fix(val)
                 elif key.endswith('num_reports'):
                     temp[key] = val if val else 0
                 elif key in ("author_flair_text", "link_flair_text"):

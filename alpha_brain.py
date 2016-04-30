@@ -99,7 +99,7 @@ def get_all(directory):
 
 
 def train_n_nn(n, ds):
-    datasets = list(n_datasets(ds, n, max_items=200000))
+    datasets = list(n_datasets(ds, 7, max_items=200000))
 
     p3 = Process(target=train_rprop, args=('p3', datasets[0]))
     p3.start()
@@ -107,20 +107,20 @@ def train_n_nn(n, ds):
     p4_1 = Process(target=train_rprop, args=('p4', datasets[1]),
                    kwargs={'etaminus': 0.8, 'etaplus': 1.5})
     p4_1.start()
-    p4_2 = Process(target=train_rprop, args=('p4', datasets[1]),
+    p4_2 = Process(target=train_rprop, args=('p4', datasets[2]),
                    kwargs={'etaminus': 1, 'etaplus': 1.7})
     p4_2.start()
-    p4_3 = Process(target=train_rprop, args=('p4', datasets[1]),
+    p4_3 = Process(target=train_rprop, args=('p4', datasets[3]),
                    kwargs={'etaminus': 0.65, 'etaplus': 1.3})
     p4_3.start()
 
-    p6_1 = Process(target=train_rprop, args=('p6', datasets[2]),
+    p6_1 = Process(target=train_rprop, args=('p6', datasets[4]),
                    kwargs={'delta0': 0.5})
     p6_1.start()
-    p6_2 = Process(target=train_rprop, args=('p6', datasets[2]),
+    p6_2 = Process(target=train_rprop, args=('p6', datasets[5]),
                    kwargs={'delta0': 0.3})
     p6_2.start()
-    p6_3 = Process(target=train_rprop, args=('p6', datasets[2]),
+    p6_3 = Process(target=train_rprop, args=('p6', datasets[6]),
                    kwargs={'delta0': 0.7})
     p6_3.start()
 
@@ -181,7 +181,7 @@ def test_on_data(nn, rows, sample=None):
 
 
 def main():
-    train_n_nn(8, build_data('completed_data/fixed/'))
+    train_n_nn(7, build_data('completed_data/fixed/'))
 
 
 if __name__ == "__main__":

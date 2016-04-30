@@ -104,23 +104,23 @@ def train_n_nn(n, ds):
     p3 = Process(target=train_rprop, args=('p3', datasets[0]))
     p3.start()
 
-    p4_1 = Process(target=train_rprop, args=('p4', datasets[1]),
+    p4_1 = Process(target=train_rprop, args=('p4_1', datasets[1]),
                    kwargs={'etaminus': 0.8, 'etaplus': 1.5})
     p4_1.start()
-    p4_2 = Process(target=train_rprop, args=('p4', datasets[2]),
+    p4_2 = Process(target=train_rprop, args=('p4_2', datasets[2]),
                    kwargs={'etaminus': 1, 'etaplus': 1.7})
     p4_2.start()
-    p4_3 = Process(target=train_rprop, args=('p4', datasets[3]),
+    p4_3 = Process(target=train_rprop, args=('p4_3', datasets[3]),
                    kwargs={'etaminus': 0.65, 'etaplus': 1.3})
     p4_3.start()
 
-    p6_1 = Process(target=train_rprop, args=('p6', datasets[4]),
+    p6_1 = Process(target=train_rprop, args=('p6_1', datasets[4]),
                    kwargs={'delta0': 0.5})
     p6_1.start()
-    p6_2 = Process(target=train_rprop, args=('p6', datasets[5]),
+    p6_2 = Process(target=train_rprop, args=('p6_2', datasets[5]),
                    kwargs={'delta0': 0.3})
     p6_2.start()
-    p6_3 = Process(target=train_rprop, args=('p6', datasets[6]),
+    p6_3 = Process(target=train_rprop, args=('p6_3', datasets[6]),
                    kwargs={'delta0': 0.7})
     p6_3.start()
 

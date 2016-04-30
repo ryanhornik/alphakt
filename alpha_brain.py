@@ -1,5 +1,4 @@
 import csv
-from time import time
 
 from multiprocessing import Process
 
@@ -7,11 +6,10 @@ import os
 
 from statistics import pstdev, mean
 
-from numpy import random as nrand
-import random as rand
+from numpy import random as nrand, sqrt
 
 from pybrain.datasets import SupervisedDataSet
-from pybrain.tools.customxml import NetworkWriter
+from pybrain.tools.customxml import NetworkWriter, NetworkReader
 from pybrain.tools.shortcuts import buildNetwork
 
 from constants import input_columns, normalized_columns, nominal_columns
@@ -32,10 +30,7 @@ def build_nn():
     return nn
 
 
-def build_data(directory):
-    print("Building data")
-    ds = SupervisedDataSet(len(input_columns), 1)
-
+def read_and_transform_data(directory):
     input_rows = []
     for f in os.listdir(directory):
         fin = open(directory + f, 'r')
@@ -55,8 +50,17 @@ def build_data(directory):
     normalize(input_rows)
     map_nominal_values(input_rows)
 
+    return input_rows
+
+
+def build_data(directory):
+    print("Building data")
+    ds = SupervisedDataSet(len(input_columns), 1)
+
+    input_rows = read_and_transform_data(directory)
+
     for row in input_rows:
-        ds.addSample(tuple(row[x] for x in input_columns), (row['8hr_score'],))
+        ds.addSample(get_input_tuple(row), row['8hr_score'], )
 
     return ds
 
@@ -95,36 +99,30 @@ def get_all(directory):
 
 
 def train_n_nn(n, ds):
-    datasets = list(n_datasets(ds, n, max_items=50000))
+    datasets = list(n_datasets(ds, n, max_items=200000))
 
-    p1 = Process(target=train_backprop, args=('p1', datasets[0], 0.015))
-    p1.start()
-
-    p2 = Process(target=train_backprop, args=('p2', datasets[1], 0.02))
-    p2.start()
-
-    p3 = Process(target=train_rprop, args=('p3', datasets[2]))
+    p3 = Process(target=train_rprop, args=('p3', datasets[0]))
     p3.start()
 
-    p4 = Process(target=train_rprop, args=('p4', datasets[3]),
-                 kwargs={'etaminus': 0.8, 'etaplus': 1.5})
-    p4.start()
+    p4_1 = Process(target=train_rprop, args=('p4', datasets[1]),
+                   kwargs={'etaminus': 0.8, 'etaplus': 1.5})
+    p4_1.start()
+    p4_2 = Process(target=train_rprop, args=('p4', datasets[1]),
+                   kwargs={'etaminus': 1, 'etaplus': 1.7})
+    p4_2.start()
+    p4_3 = Process(target=train_rprop, args=('p4', datasets[1]),
+                   kwargs={'etaminus': 0.65, 'etaplus': 1.3})
+    p4_3.start()
 
-    p5 = Process(target=train_rprop, args=('p5', datasets[4]),
-                 kwargs={'etaminus': 0.8, 'etaplus': 1.5, 'delta0': 0.5})
-    p5.start()
-
-    p6 = Process(target=train_rprop, args=('p6', datasets[5]),
-                 kwargs={'delta0': 0.5})
-    p6.start()
-
-    p7 = Process(target=train_rprop, args=('p7', datasets[6]),
-                 kwargs={'etaminus': 0.2, 'etaplus': 0.9})
-    p7.start()
-
-    p8 = Process(target=train_rprop, args=('p8', datasets[6]),
-                 kwargs={'etaminus': 0.2, 'etaplus': 0.9, 'delta0': 0.05})
-    p8.start()
+    p6_1 = Process(target=train_rprop, args=('p6', datasets[2]),
+                   kwargs={'delta0': 0.5})
+    p6_1.start()
+    p6_2 = Process(target=train_rprop, args=('p6', datasets[2]),
+                   kwargs={'delta0': 0.3})
+    p6_2.start()
+    p6_3 = Process(target=train_rprop, args=('p6', datasets[2]),
+                   kwargs={'delta0': 0.7})
+    p6_3.start()
 
 
 def train_backprop(name, ds, rate):
@@ -151,12 +149,35 @@ def n_datasets(ds, n=2, max_items=None):
     if max_items:
         separator = min(separator, max_items)
 
-    indicies_lists = [indicies[x*separator: (x+1)*separator] for x in range(0, n)]
+    indicies_lists = [indicies[x * separator: (x + 1) * separator] for x in range(0, n)]
 
     data_sets = (SupervisedDataSet(inp=ds['input'][indicies_lists[y]].copy(),
                                    target=ds['target'][indicies_lists[y]]) for y in range(0, n))
 
     return data_sets
+
+
+def get_input_tuple(input_row):
+    return tuple(input_row[x] for x in input_columns)
+
+
+def test_on_data(nn, rows, sample=None):
+    if isinstance(nn, str):
+        nn = NetworkReader.readFrom(nn)
+
+    if isinstance(rows, str):
+        test_rows = read_and_transform_data('completed_data/fixed/')
+    else:
+        test_rows = rows
+
+    if sample:
+        test_rows = nrand.permutation(rows)[:sample]
+
+    squared_error_sum = 0
+    for r in test_rows:
+        result = nn.activate(get_input_tuple(r))
+        squared_error_sum += pow(result[0] - int(r['8hr_score']), 2)
+    return sqrt(squared_error_sum / len(test_rows))
 
 
 def main():
@@ -165,5 +186,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
